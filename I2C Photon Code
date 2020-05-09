@@ -1,4 +1,3 @@
-
 //This function will only activate whenever a request comes through the I2C connection to this I2C address.
 void requestEvent(){
     int light_value = analogRead(A0); //Reads the Light Level from the A0 pin. This is the input for the sensor.
