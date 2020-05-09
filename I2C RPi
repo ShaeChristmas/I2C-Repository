@@ -1,0 +1,23 @@
+import smbus
+import time
+
+bus = smbus.SMBus(1)
+
+address = 0x05
+
+def convertToOutput(value):
+    switchCase = {
+        0: 'Too Dark.',
+        1: 'Dark.',
+        2: 'Medium.',
+        3: 'Bright.',
+        4: 'Too Bright!'
+    }
+    return switchCase.get(value, "invalid light Level")
+
+def readValue():
+    value = bus.read_byte(address)
+    return value
+
+lightLvl = readValue()
+print("Light Level: ",convertToOutput(lightLvl))
