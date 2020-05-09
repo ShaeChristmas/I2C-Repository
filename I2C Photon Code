@@ -1,0 +1,31 @@
+
+//This function will only activate whenever a request comes through the I2C connection to this I2C address.
+void requestEvent(){
+    int light_value = analogRead(A0); //Reads the Light Level from the A0 pin. This is the input for the sensor.
+    int response; //initialises the response variable.
+    
+    //I wanted to do the following processing on the rpi, however i needed to do it here as i could only send one byte.
+    //Yes, i could have created a block of bytes for the rpi to read, however that would overcomplicate the system.
+    if (light_value >=3500){
+        response = 4;//Too bright
+    }else if(light_value >=3000){
+        response = 3;//bright
+    }else if(light_value >=2000){
+        response = 2;//medium
+    }else if(light_value >=750){
+        response = 1;//dark
+    }else{
+        response = 0;//too dark
+    }
+    Wire.write(response);//Writes the response variable to the Wire.
+}
+
+void setup() {
+    Wire.setSpeed(400000); //sets the speed of the connection between the Photon and the RPi.
+    Wire.begin(5); //begins using I2C, and sets the Photon as a Slave device.
+    Wire.onRequest(requestEvent); //on a request for byte from the Master device, runs the requestEvent function, as defined above.
+}
+
+void loop() {
+    delay(100);//keeps the program loop running to be able to accept requests.
+}
